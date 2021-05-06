@@ -5,22 +5,25 @@ import java.util.*;
 public class medium3LongestSubstringWithoutRepeatingCharacters {
 	public static int lengthOfLongestSubstring(String s) {
 		char[] c = s.toCharArray();
-		int max = 0;
-		for (int i=0; i<c.length; i++) {
-			//get longest substring from this index
-			Set<Character> seen = new HashSet<>();
-			int j = i;
-			while (j<c.length && !seen.contains(c[j])) {
-				seen.add(c[j]);
-				j++;
-			}
-			if (j-i > max) {
-				max = j-i;
-			}
-		}
-		return max;
+        Map<Character, Integer> m = new HashMap<>();
+        int start = 0;
+        int longest = 0;
+        for (int i=0; i<c.length; i++) {
+            if (m.containsKey(c[i])) {
+                int indexOfDupe = m.get(c[i]);
+                for (int j=start; j<=indexOfDupe; j++) {
+                    m.remove(c[j]);
+                }
+                start = indexOfDupe+1;
+            }
+            m.put(c[i], i);
+            if (m.size() > longest) {
+                longest = m.size();
+            }
+        }
+        return longest;
     }
 	public static void main(String[] args) {
-		System.out.println(lengthOfLongestSubstring("abcabcbb"));
+		System.out.println(lengthOfLongestSubstring("bpfbhmipx"));
 	}
 }
